@@ -1,146 +1,74 @@
-# 📋 Manual Setup Guide — Phase 1
+# Manual Setup Guide
 
-> **Do these steps AFTER Phase 1 code is committed to GitHub.**  
-> These are one-time manual tasks that cannot be automated.
-
----
-
-## ✅ Step 1: Create GitHub Repository
-
-1. Go to → **https://github.com/new**
-2. Fill in:
-   - **Repository name:** `cynbit-ai-assistant`
-   - **Description:** `AI-powered chatbot for Cynbit Technologies website | Full Stack Intern Assessment`
-   - **Visibility:** ✅ Public
-   - ❌ Do NOT initialize with README (we already have one)
-   - ❌ Do NOT add .gitignore (we already have one)
-3. Click **"Create repository"**
-4. Copy your repository URL (e.g., `https://github.com/YourUsername/cynbit-ai-assistant.git`)
+> Complete these steps for Phase 1. Reply "Phase 1 done" when finished.
 
 ---
 
-## ✅ Step 2: Initialize Git & Push Code
+## Step 1: Revoke Your OpenAI Key (IMPORTANT)
 
-After creating the GitHub repo, run these commands one by one in your terminal inside `E:\CynBit Assessment`:
+Your `server/.env` contained a real OpenAI API key. Even though `.env` is gitignored, you should revoke it immediately as a precaution.
 
-```bash
-git init
-```
-
-```bash
-git add .
-```
-
-```bash
-git commit -m "feat: initialize MERN stack project with full folder structure, React frontend, Express backend, MongoDB models, AI service with knowledge base, and rate limiting"
-```
-
-```bash
-git branch -M main
-```
-
-```bash
-git remote add origin https://github.com/YOUR_USERNAME/cynbit-ai-assistant.git
-```
-
-```bash
-git push -u origin main
-```
-
-> ⚠️ Replace `YOUR_USERNAME` with your actual GitHub username.
+1. Go to → https://platform.openai.com/api-keys
+2. Find the key and click **Revoke**
+3. If you want to use OpenAI later, generate a new key
 
 ---
 
-## ✅ Step 3: Choose Your AI Provider (100% Free Options Available)
+## Step 2: Get a Free Gemini API Key (Recommended — 100% Free)
 
-You have **3 options** for AI, including completely free choices:
+No credit card. No billing. 15 requests/minute free forever.
 
-### Option A: Google Gemini (Recommended — 100% Free, No Credit Card Required)
-1. Go to → **https://aistudio.google.com/app/apikey**
-2. Sign in with any standard Google account.
-3. Click **"Create API key"**.
-4. Copy the generated key.
-5. In `server/.env`, set:
-   ```env
-   GEMINI_API_KEY=your_gemini_api_key_here
-   GEMINI_MODEL=gemini-1.5-flash
-   ```
-*(Free tier allows up to 15 requests per minute at $0 cost!)*
-
-### Option B: Built-in Knowledge Base Engine (100% Free, Zero Keys Needed)
-- If you don't provide any API key, the chatbot automatically uses its **built-in Cynbit Knowledge Base Engine**.
-- It provides rich, grounded answers regarding Cynbit's services, proprietary products (Studio, TenantEase, Revio), BitElevate, recruitment, and contact details with zero API costs!
-
-### Option C: OpenAI API
-- If you have OpenAI credits:
-  ```env
-  OPENAI_API_KEY=sk-proj-your-actual-api-key-here
-  AI_MODEL=gpt-4o-mini
-  ```
-- *Note:* If quota is 0 (HTTP 429), the assistant automatically switches to the Knowledge Base engine without interrupting the user.
+1. Go to → https://aistudio.google.com/app/apikey
+2. Sign in with your Google account
+3. Click **"Create API key"**
+4. Copy the key
 
 ---
 
-## ✅ Step 4: MongoDB Atlas (Optional for Local Testing)
+## Step 3: Set Up `server/.env`
 
-> 💡 **Note:** If you skip MongoDB setup, the server automatically uses a **resilient in-memory store** so you can develop and test immediately with zero configuration!
-
-To persist conversations and leads to the cloud:
-1. Go to → **https://cloud.mongodb.com/**
-2. Sign up / Sign in → choose **"M0 Free Tier"** (Free Forever)
-3. Select region: **Mumbai (ap-south-1)**
-4. Click **"Connect"** → **"Connect your application"**
-5. Copy your connection string and add it to `server/.env`:
-   ```env
-   MONGODB_URI=mongodb+srv://username:<password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority
-   ```
-6. Under **Network Access**, ensure IP `0.0.0.0/0` (Allow Access from Anywhere) is enabled.
-
----
-
-## ✅ Step 5: Server .env File
-
-Your `E:\CynBit Assessment\server\.env` has already been generated:
+Open `E:\CynBit Assessment\server\.env` and replace the contents with:
 
 ```env
 PORT=5000
 NODE_ENV=development
 
-# Optional - defaults to in-memory store if not provided:
-# MONGODB_URI=mongodb+srv://username:<password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority
+# Free Gemini AI (get key from https://aistudio.google.com/app/apikey)
+GEMINI_API_KEY=your_gemini_api_key_here
+GEMINI_MODEL=gemini-1.5-flash
 
-# Free Tier AI (Gemini):
-# GEMINI_API_KEY=your_free_key
+# MongoDB Atlas (optional — app works without it using in-memory storage)
+# MONGODB_URI=mongodb+srv://<user>:<password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority
 
-# OpenAI:
-OPENAI_API_KEY=sk-proj-xxxxxxxxxxxxxxxxxxxx
-AI_MODEL=gpt-4o-mini
-
+# Frontend URL for CORS
 CLIENT_URL=http://localhost:5173
 ```
 
-> ⚠️ This file is in `.gitignore` — it will NEVER be pushed to GitHub. Keep it safe.
+> This file is in `.gitignore` — it will NEVER be pushed to GitHub.
 
 ---
 
-## ✅ Step 6: Test Locally
+## Step 4: Install Dependencies
 
-Run both servers:
+Open two terminals:
 
 **Terminal 1 — Backend:**
 ```bash
 cd "E:\CynBit Assessment\server"
+npm install
 npm run dev
 ```
-You should see:
+
+Expected output:
 ```
-✅ MongoDB Connected: cluster0.xxxxx.mongodb.net
 🚀 Cynbit AI Assistant API running on port 5000
+⚠️  MONGODB_URI not found — Running with in-memory storage.
 ```
 
 **Terminal 2 — Frontend:**
 ```bash
 cd "E:\CynBit Assessment\client"
+npm install
 npm run dev
 ```
 
@@ -148,27 +76,26 @@ Open browser: **http://localhost:5173**
 
 ---
 
-## ✅ Verification Checklist
+## Step 5: Verify Everything Works
 
-- [ ] GitHub repo created and code pushed
-- [ ] OpenAI API key obtained
-- [ ] MongoDB Atlas cluster created and connection string obtained
-- [ ] `server/.env` file created with all values filled in
-- [ ] Backend starts without errors on port 5000
-- [ ] Frontend loads at localhost:5173
-- [ ] Chat bubble appears on bottom-right of page
-- [ ] Clicking the chat bubble opens the assistant
-- [ ] Sending a test message gets a response
+- [ ] Chat bubble appears bottom-right of the page
+- [ ] Clicking it opens the assistant window
+- [ ] Quick action buttons (Services, Products, etc.) work
+- [ ] Sending a message gets a response
+- [ ] No errors in either terminal
 
 ---
 
-## ⚠️ Important Security Reminders
+## Optional: MongoDB Atlas (Free Tier)
 
-- **NEVER** push `.env` files to GitHub
-- **NEVER** share your OpenAI API key publicly
-- The `.gitignore` file already excludes `.env` files
-- Use `.env.example` files as templates (these are safe to commit)
+Skip this for now — the app works perfectly without it.
+
+If you want conversation persistence later:
+1. Go to → https://cloud.mongodb.com/
+2. Create a free **M0** cluster
+3. Get the connection string and add it to `server/.env` as `MONGODB_URI`
+4. Under **Network Access**, add `0.0.0.0/0`
 
 ---
 
-Once all steps above are complete, reply **"Phase 1 done"** and we'll move to **Phase 2: Building the full chatbot UI**.
+Once all steps are done, reply **"Phase 1 done"** to start Phase 2.

@@ -13,10 +13,19 @@
   --cynbit-gradient: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100vh;
 }
 
 body {
@@ -24,6 +33,7 @@ body {
   background: var(--cynbit-bg);
   color: var(--cynbit-text);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 /* Custom scrollbar for chat */
@@ -62,7 +72,6 @@ body {
   box-shadow: 0 0 20px rgba(37, 99, 235, 0.3), 0 0 40px rgba(37, 99, 235, 0.1);
 }
 
-/* Pulse animation for active indicator */
 @keyframes pulse-ring {
   0% { transform: scale(0.8); opacity: 0.8; }
   100% { transform: scale(1.5); opacity: 0; }
@@ -81,6 +90,11 @@ body {
 @keyframes fade-in {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes typing-dot {

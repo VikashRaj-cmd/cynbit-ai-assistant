@@ -9,31 +9,54 @@ const QUICK_ACTIONS = [
 
 const QuickActions = ({ onSelect, disabled }) => {
   return (
-    <div className="px-3 py-2 border-t" style={{ borderColor: 'rgba(99,102,241,0.1)' }}>
-      <p className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold mb-2">
+    <div
+      style={{
+        padding: '0.625rem 0.875rem 0.5rem',
+        borderBottom: '1px solid rgba(99,102,241,0.12)',
+      }}
+    >
+      <p
+        style={{
+          fontSize: '0.6rem',
+          color: '#475569',
+          textTransform: 'uppercase',
+          letterSpacing: '0.1em',
+          fontWeight: 600,
+          marginBottom: '0.5rem',
+        }}
+      >
         Quick Questions
       </p>
-      <div className="flex flex-wrap gap-1.5">
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.375rem' }}>
         {QUICK_ACTIONS.map((action) => (
           <button
             key={action.label}
             onClick={() => onSelect(action.query)}
             disabled={disabled}
-            className="px-3 py-1.5 rounded-full text-xs font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:-translate-y-0.5 active:scale-95"
             style={{
+              padding: '0.3rem 0.75rem',
+              borderRadius: '9999px',
+              fontSize: '0.7rem',
+              fontWeight: 500,
+              cursor: disabled ? 'not-allowed' : 'pointer',
+              opacity: disabled ? 0.4 : 1,
               background: 'rgba(37,99,235,0.1)',
-              border: '1px solid rgba(37,99,235,0.25)',
+              border: '1px solid rgba(37,99,235,0.28)',
               color: '#93c5fd',
+              transition: 'background 0.15s, border-color 0.15s, transform 0.15s',
+              whiteSpace: 'nowrap',
             }}
             onMouseEnter={(e) => {
               if (!disabled) {
-                e.target.style.background = 'rgba(37,99,235,0.25)';
-                e.target.style.borderColor = 'rgba(37,99,235,0.5)';
+                e.currentTarget.style.background = 'rgba(37,99,235,0.22)';
+                e.currentTarget.style.borderColor = 'rgba(37,99,235,0.55)';
+                e.currentTarget.style.transform = 'translateY(-1px)';
               }
             }}
             onMouseLeave={(e) => {
-              e.target.style.background = 'rgba(37,99,235,0.1)';
-              e.target.style.borderColor = 'rgba(37,99,235,0.25)';
+              e.currentTarget.style.background = 'rgba(37,99,235,0.1)';
+              e.currentTarget.style.borderColor = 'rgba(37,99,235,0.28)';
+              e.currentTarget.style.transform = 'translateY(0)';
             }}
           >
             {action.label}

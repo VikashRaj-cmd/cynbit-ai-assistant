@@ -70,38 +70,97 @@ const products = [
 const Home = () => {
   return (
     <div
-      className="min-h-screen text-white font-sans"
-      style={{ background: 'linear-gradient(135deg, #0f172a 0%, #0c1221 50%, #0f172a 100%)' }}
+      style={{
+        width: '100%',
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #0f172a 0%, #0c1221 50%, #0f172a 100%)',
+        color: '#f8fafc',
+        fontFamily: 'Inter, sans-serif',
+        overflowX: 'hidden',
+      }}
     >
       {/* Ambient background glows */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+      <div style={{ position: 'fixed', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
         <div
-          className="absolute -top-40 -left-40 w-96 h-96 rounded-full opacity-10 blur-3xl"
-          style={{ background: 'radial-gradient(circle, #2563eb, transparent)' }}
+          style={{
+            position: 'absolute',
+            top: '-10rem',
+            left: '-10rem',
+            width: '24rem',
+            height: '24rem',
+            borderRadius: '50%',
+            opacity: 0.12,
+            filter: 'blur(80px)',
+            background: 'radial-gradient(circle, #2563eb, transparent)',
+          }}
         />
         <div
-          className="absolute top-1/2 -right-40 w-96 h-96 rounded-full opacity-8 blur-3xl"
-          style={{ background: 'radial-gradient(circle, #0e7490, transparent)' }}
+          style={{
+            position: 'absolute',
+            top: '50%',
+            right: '-10rem',
+            width: '24rem',
+            height: '24rem',
+            borderRadius: '50%',
+            opacity: 0.08,
+            filter: 'blur(80px)',
+            background: 'radial-gradient(circle, #0e7490, transparent)',
+          }}
         />
       </div>
 
       {/* Header */}
-      <header className="relative z-10 border-b" style={{ borderColor: 'rgba(99,102,241,0.1)' }}>
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+      <header
+        style={{
+          position: 'relative',
+          zIndex: 10,
+          width: '100%',
+          borderBottom: '1px solid rgba(99,102,241,0.1)',
+        }}
+      >
+        <div
+          style={{
+            maxWidth: '1152px',
+            margin: '0 auto',
+            padding: '1rem 1.5rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, #2563eb, #0e7490)' }}
+              style={{
+                width: '2rem',
+                height: '2rem',
+                borderRadius: '0.5rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'linear-gradient(135deg, #2563eb, #0e7490)',
+              }}
             >
-              <Bot size={16} className="text-white" />
+              <Bot size={16} color="white" />
             </div>
-            <span className="font-bold text-white tracking-tight">Cynbit AI Demo</span>
+            <span style={{ fontWeight: 700, color: 'white', letterSpacing: '-0.025em' }}>
+              Cynbit AI Demo
+            </span>
           </div>
           <a
             href="https://www.cynbit.in"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-white transition-colors"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.375rem',
+              fontSize: '0.875rem',
+              color: '#94a3b8',
+              textDecoration: 'none',
+              transition: 'color 0.2s',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = 'white')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = '#94a3b8')}
           >
             <Globe size={14} />
             cynbit.in
@@ -111,156 +170,316 @@ const Home = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="relative z-10 max-w-6xl mx-auto px-6 py-24 text-center">
-        <div
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold mb-8 border"
-          style={{
-            background: 'rgba(37,99,235,0.1)',
-            borderColor: 'rgba(37,99,235,0.3)',
-            color: '#93c5fd',
-          }}
-        >
-          <Zap size={12} />
-          Full Stack Developer Intern Assessment — Cynbit Technologies
-        </div>
-
-        <h1 className="text-5xl md:text-7xl font-black tracking-tight leading-tight mb-6">
-          <span className="gradient-text">Cynbit AI</span>
-          <br />
-          <span className="text-white">Assistant</span>
-        </h1>
-
-        <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-12 leading-relaxed">
-          An AI-powered chatbot that helps visitors instantly understand Cynbit's services, products, and
-          how to connect — improving engagement and reducing navigation friction.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <button
-            onClick={() => {
-              const btn = document.getElementById('cynbit-chat-btn');
-              if (btn) btn.click();
+      <section
+        style={{
+          position: 'relative',
+          zIndex: 10,
+          width: '100%',
+          padding: '6rem 1.5rem',
+          textAlign: 'center',
+        }}
+      >
+        <div style={{ maxWidth: '1152px', margin: '0 auto' }}>
+          {/* Badge */}
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '0.5rem 1rem',
+              borderRadius: '9999px',
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              marginBottom: '2rem',
+              background: 'rgba(37,99,235,0.1)',
+              border: '1px solid rgba(37,99,235,0.3)',
+              color: '#93c5fd',
             }}
-            className="flex items-center gap-2 px-8 py-4 rounded-full font-bold text-white shadow-xl transition-all hover:scale-105 active:scale-95"
-            style={{ background: 'linear-gradient(135deg, #2563eb, #0e7490)' }}
           >
-            <MessageCircle size={18} />
-            Try the Assistant
-            <ArrowRight size={16} />
-          </button>
-          <a
-            href="https://www.cynbit.in"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-8 py-4 rounded-full font-bold transition-all hover:bg-white/10 border"
-            style={{ borderColor: 'rgba(99,102,241,0.3)', color: '#94a3b8' }}
+            <Zap size={12} />
+            Full Stack Developer Intern Assessment — Cynbit Technologies
+          </div>
+
+          {/* Heading */}
+          <h1
+            style={{
+              fontSize: 'clamp(2.5rem, 8vw, 5rem)',
+              fontWeight: 900,
+              letterSpacing: '-0.04em',
+              lineHeight: 1.1,
+              marginBottom: '1.5rem',
+            }}
           >
-            <Globe size={18} />
-            Visit Cynbit Website
-          </a>
+            <span className="gradient-text">Cynbit AI</span>
+            <br />
+            <span style={{ color: 'white' }}>Assistant</span>
+          </h1>
+
+          {/* Subtitle */}
+          <p
+            style={{
+              fontSize: 'clamp(1rem, 2.5vw, 1.25rem)',
+              color: '#94a3b8',
+              maxWidth: '42rem',
+              margin: '0 auto 3rem',
+              lineHeight: 1.7,
+            }}
+          >
+            An AI-powered chatbot that helps visitors instantly understand Cynbit's services,
+            products, and how to connect — improving engagement and reducing navigation friction.
+          </p>
+
+          {/* CTA Buttons */}
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '1rem',
+              justifyContent: 'center',
+            }}
+          >
+            <button
+              onClick={() => {
+                const btn = document.getElementById('cynbit-chat-btn');
+                if (btn) btn.click();
+              }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                padding: '1rem 2rem',
+                borderRadius: '9999px',
+                fontWeight: 700,
+                color: 'white',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '1rem',
+                background: 'linear-gradient(135deg, #2563eb, #0e7490)',
+                boxShadow: '0 10px 30px rgba(37,99,235,0.3)',
+                transition: 'transform 0.2s, box-shadow 0.2s',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.05)';
+                e.currentTarget.style.boxShadow = '0 15px 40px rgba(37,99,235,0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)';
+                e.currentTarget.style.boxShadow = '0 10px 30px rgba(37,99,235,0.3)';
+              }}
+            >
+              <MessageCircle size={18} />
+              Try the Assistant
+              <ArrowRight size={16} />
+            </button>
+            <a
+              href="https://www.cynbit.in"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                padding: '1rem 2rem',
+                borderRadius: '9999px',
+                fontWeight: 700,
+                color: '#94a3b8',
+                textDecoration: 'none',
+                border: '1px solid rgba(99,102,241,0.3)',
+                fontSize: '1rem',
+                transition: 'background 0.2s, color 0.2s',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
+                e.currentTarget.style.color = 'white';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.color = '#94a3b8';
+              }}
+            >
+              <Globe size={18} />
+              Visit Cynbit Website
+            </a>
+          </div>
         </div>
       </section>
 
       {/* Services Grid */}
-      <section className="relative z-10 max-w-6xl mx-auto px-6 pb-20">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-black text-white mb-3">Services Overview</h2>
-          <p className="text-slate-400">Ask the assistant about any of these</p>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {services.map((service) => (
-            <a
-              key={service.title}
-              href={service.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group p-6 rounded-2xl border transition-all hover:-translate-y-1 hover:shadow-xl"
-              style={{
-                background: 'rgba(30,41,59,0.6)',
-                borderColor: 'rgba(99,102,241,0.15)',
-              }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.borderColor = `${service.color}40`)
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.borderColor = 'rgba(99,102,241,0.15)')
-              }
-            >
-              <div
-                className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110"
-                style={{ background: `${service.color}20`, color: service.color }}
+      <section
+        style={{
+          position: 'relative',
+          zIndex: 10,
+          width: '100%',
+          padding: '0 1.5rem 5rem',
+        }}
+      >
+        <div style={{ maxWidth: '1152px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+            <h2 style={{ fontSize: '1.875rem', fontWeight: 900, color: 'white', marginBottom: '0.75rem' }}>
+              Services Overview
+            </h2>
+            <p style={{ color: '#94a3b8' }}>Ask the assistant about any of these</p>
+          </div>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+              gap: '1rem',
+            }}
+          >
+            {services.map((service) => (
+              <a
+                key={service.title}
+                href={service.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'block',
+                  padding: '1.5rem',
+                  borderRadius: '1rem',
+                  border: '1px solid rgba(99,102,241,0.15)',
+                  background: 'rgba(30,41,59,0.6)',
+                  textDecoration: 'none',
+                  transition: 'transform 0.2s, border-color 0.2s, box-shadow 0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.borderColor = `${service.color}50`;
+                  e.currentTarget.style.boxShadow = `0 10px 30px rgba(0,0,0,0.3)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.borderColor = 'rgba(99,102,241,0.15)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
               >
-                {service.icon}
-              </div>
-              <h3 className="text-white font-bold text-sm mb-2">{service.title}</h3>
-              <p className="text-slate-500 text-xs leading-relaxed">{service.description}</p>
-            </a>
-          ))}
+                <div
+                  style={{
+                    width: '2.5rem',
+                    height: '2.5rem',
+                    borderRadius: '0.75rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '1rem',
+                    background: `${service.color}20`,
+                    color: service.color,
+                  }}
+                >
+                  {service.icon}
+                </div>
+                <h3 style={{ color: 'white', fontWeight: 700, fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+                  {service.title}
+                </h3>
+                <p style={{ color: '#64748b', fontSize: '0.75rem', lineHeight: 1.6 }}>
+                  {service.description}
+                </p>
+              </a>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Products Section */}
-      <section className="relative z-10 max-w-6xl mx-auto px-6 pb-20">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-black text-white mb-3">Product Suite</h2>
-          <p className="text-slate-400">Cynbit's proprietary SaaS ecosystem</p>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {products.map((product) => (
-            <a
-              key={product.name}
-              href={product.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group p-6 rounded-2xl border transition-all hover:-translate-y-1 hover:shadow-xl"
-              style={{
-                background: 'rgba(30,41,59,0.6)',
-                borderColor: 'rgba(99,102,241,0.15)',
-              }}
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <span className="text-2xl">{product.icon}</span>
-                <div>
-                  <div className="text-white font-bold text-sm">{product.name}</div>
-                  <div
-                    className="text-[10px] font-semibold uppercase tracking-widest"
-                    style={{ color: '#60a5fa' }}
-                  >
-                    {product.tag}
+      <section
+        style={{
+          position: 'relative',
+          zIndex: 10,
+          width: '100%',
+          padding: '0 1.5rem 5rem',
+        }}
+      >
+        <div style={{ maxWidth: '1152px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+            <h2 style={{ fontSize: '1.875rem', fontWeight: 900, color: 'white', marginBottom: '0.75rem' }}>
+              Product Suite
+            </h2>
+            <p style={{ color: '#94a3b8' }}>Cynbit's proprietary SaaS ecosystem</p>
+          </div>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: '1.5rem',
+            }}
+          >
+            {products.map((product) => (
+              <a
+                key={product.name}
+                href={product.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'block',
+                  padding: '1.5rem',
+                  borderRadius: '1rem',
+                  border: '1px solid rgba(99,102,241,0.15)',
+                  background: 'rgba(30,41,59,0.6)',
+                  textDecoration: 'none',
+                  transition: 'transform 0.2s, box-shadow 0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+                  <span style={{ fontSize: '1.5rem' }}>{product.icon}</span>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ color: 'white', fontWeight: 700, fontSize: '0.875rem' }}>{product.name}</div>
+                    <div style={{ color: '#60a5fa', fontSize: '0.625rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                      {product.tag}
+                    </div>
                   </div>
+                  <ExternalLink size={14} color="#475569" />
                 </div>
-                <ExternalLink
-                  size={14}
-                  className="ml-auto text-slate-600 group-hover:text-slate-400 transition-colors"
-                />
-              </div>
-              <p className="text-slate-500 text-xs leading-relaxed">{product.description}</p>
-            </a>
-          ))}
+                <p style={{ color: '#64748b', fontSize: '0.75rem', lineHeight: 1.6 }}>
+                  {product.description}
+                </p>
+              </a>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Assessment Note */}
-      <section className="relative z-10 max-w-6xl mx-auto px-6 pb-24">
-        <div
-          className="rounded-3xl p-8 border text-center"
-          style={{
-            background: 'rgba(37,99,235,0.05)',
-            borderColor: 'rgba(37,99,235,0.2)',
-          }}
-        >
-          <Package size={32} className="text-blue-400 mx-auto mb-4" />
-          <h3 className="text-white font-black text-xl mb-2">Assessment Project</h3>
-          <p className="text-slate-400 text-sm max-w-lg mx-auto">
-            This prototype demonstrates an AI chatbot improvement for Cynbit's website. Built with{' '}
-            <strong className="text-blue-400">React + Vite</strong>,{' '}
-            <strong className="text-cyan-400">Node.js + Express</strong>, and{' '}
-            <strong className="text-purple-400">MongoDB</strong> as part of the Full Stack Developer
-            Intern technical assessment.
-          </p>
-          <p className="text-slate-600 text-xs mt-4">
-            Click the chat bubble in the bottom-right to interact with the assistant →
-          </p>
+      <section
+        style={{
+          position: 'relative',
+          zIndex: 10,
+          width: '100%',
+          padding: '0 1.5rem 6rem',
+        }}
+      >
+        <div style={{ maxWidth: '1152px', margin: '0 auto' }}>
+          <div
+            style={{
+              borderRadius: '1.5rem',
+              padding: '2.5rem',
+              border: '1px solid rgba(37,99,235,0.2)',
+              background: 'rgba(37,99,235,0.05)',
+              textAlign: 'center',
+            }}
+          >
+            <Package size={32} color="#60a5fa" style={{ margin: '0 auto 1rem' }} />
+            <h3 style={{ color: 'white', fontWeight: 900, fontSize: '1.25rem', marginBottom: '0.75rem' }}>
+              Assessment Project
+            </h3>
+            <p style={{ color: '#94a3b8', fontSize: '0.875rem', maxWidth: '32rem', margin: '0 auto' }}>
+              This prototype demonstrates an AI chatbot improvement for Cynbit's website. Built with{' '}
+              <strong style={{ color: '#60a5fa' }}>React + Vite</strong>,{' '}
+              <strong style={{ color: '#22d3ee' }}>Node.js + Express</strong>, and{' '}
+              <strong style={{ color: '#c084fc' }}>MongoDB</strong> as part of the Full Stack Developer
+              Intern technical assessment.
+            </p>
+            <p style={{ color: '#475569', fontSize: '0.75rem', marginTop: '1rem' }}>
+              Click the chat bubble in the bottom-right corner to interact with the assistant →
+            </p>
+          </div>
         </div>
       </section>
     </div>

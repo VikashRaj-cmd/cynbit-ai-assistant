@@ -1,12 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Bot, MessageSquare } from 'lucide-react';
+import { MessageSquare } from 'lucide-react';
 import ChatHeader from './ChatHeader';
 import MessageBubble from './MessageBubble';
 import QuickActions from './QuickActions';
 import ChatInput from './ChatInput';
 import { sendMessage } from '../services/chatService';
 
-// Generate or retrieve a persistent session ID
 const getSessionId = () => {
   const key = 'cynbit_session_id';
   let id = sessionStorage.getItem(key);
@@ -20,16 +19,7 @@ const getSessionId = () => {
 const WELCOME_MESSAGE = {
   id: 'welcome',
   role: 'assistant',
-  content: `👋 Hi there! I'm **Cynbit's AI Assistant**.
-
-I can help you with:
-- 🛠️ Services & expertise
-- 📦 Products (Studio, TenantEase, Revio)
-- 💼 Careers & internships
-- 🎓 BitElevate program
-- 📞 Contact & pricing
-
-What would you like to know?`,
+  content: `👋 Hi there! I'm **Cynbit's AI Assistant**.\n\nI can help you with:\n- 🛠️ Services & expertise\n- 📦 Products (Studio, TenantEase, Revio)\n- 💼 Careers & internships\n- 🎓 BitElevate program\n- 📞 Contact & pricing\n\nWhat would you like to know?`,
   timestamp: new Date().toISOString(),
 };
 
@@ -42,7 +32,6 @@ const ChatWidget = () => {
   const messagesEndRef = useRef(null);
   const sessionId = useRef(getSessionId());
 
-  // Show notification bubble after 5 seconds if chat is closed
   useEffect(() => {
     if (!isOpen) {
       const timer = setTimeout(() => setHasNotification(true), 5000);
@@ -51,7 +40,6 @@ const ChatWidget = () => {
     setHasNotification(false);
   }, [isOpen]);
 
-  // Auto-scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -63,7 +51,6 @@ const ChatWidget = () => {
   };
 
   const handleClose = () => setIsOpen(false);
-
   const handleToggleMinimize = () => setIsMinimized((prev) => !prev);
 
   const handleSend = useCallback(async (text) => {
@@ -76,11 +63,9 @@ const ChatWidget = () => {
       timestamp: new Date().toISOString(),
     };
 
-    // Optimistic UI — add user message immediately
     setMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
 
-    // Add typing indicator
     const typingId = `typing_${Date.now()}`;
     setMessages((prev) => [
       ...prev,
@@ -89,8 +74,6 @@ const ChatWidget = () => {
 
     try {
       const data = await sendMessage(text, sessionId.current);
-
-      // Replace typing indicator with actual response
       setMessages((prev) =>
         prev
           .filter((m) => m.id !== typingId)
@@ -101,8 +84,7 @@ const ChatWidget = () => {
             timestamp: new Date().toISOString(),
           })
       );
-    } catch (err) {
-      // Remove typing indicator and show error
+    } catch {
       setMessages((prev) =>
         prev
           .filter((m) => m.id !== typingId)
@@ -110,7 +92,7 @@ const ChatWidget = () => {
             id: `err_${Date.now()}`,
             role: 'assistant',
             content:
-              '⚠️ I\'m having trouble connecting right now. Please try again or reach out directly at **opportunities@cynbit.in** or call **+91 89479 62667**.',
+              "⚠️ I'm having trouble connecting right now. Please try again or reach out at **opportunities@cynbit.in** or call **+91 89479 62667**.",
             timestamp: new Date().toISOString(),
           })
       );
@@ -121,20 +103,59 @@ const ChatWidget = () => {
 
   return (
     <>
-      {/* Floating Chat Button */}
+      {/* Floating Button */}
       {!isOpen && (
         <button
           id="cynbit-chat-btn"
           onClick={handleOpen}
-          className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full flex items-center justify-center shadow-2xl transition-all hover:scale-110 active:scale-95 glow-blue animate-float"
-          style={{ background: 'linear-gradient(135deg, #2563eb 0%, #0e7490 100%)' }}
           aria-label="Open Cynbit AI Assistant"
+          className="animate-float glow-blue"
+          style={{
+            position: 'fixed',
+            bottom: '1.5rem',
+            right: '1.5rem',
+            zIndex: 9999,
+            width: '3.5rem',
+            height: '3.5rem',
+            borderRadius: '50%',
+            border: 'none',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'linear-gradient(135deg, #2563eb 0%, #0e7490 100%)',
+            boxShadow: '0 8px 32px rgba(37,99,235,0.45)',
+            transition: 'transform 0.2s, box-shadow 0.2s',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'scale(1.1)';
+            e.currentTarget.style.boxShadow = '0 12px 40px rgba(37,99,235,0.6)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.boxShadow = '0 8px 32px rgba(37,99,235,0.45)';
+          }}
         >
-          <MessageSquare size={24} className="text-white" />
-
-          {/* Notification badge */}
+          <MessageSquare size={22} color="white" />
           {hasNotification && (
-            <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-[10px] text-white font-bold animate-bounce">
+            <span
+              style={{
+                position: 'absolute',
+                top: '-4px',
+                right: '-4px',
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                background: '#ef4444',
+                border: '2px solid #0f172a',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '10px',
+                color: 'white',
+                fontWeight: 700,
+              }}
+            >
               1
             </span>
           )}
@@ -145,13 +166,21 @@ const ChatWidget = () => {
       {isOpen && (
         <div
           id="cynbit-chat-window"
-          className="fixed bottom-6 right-6 z-50 flex flex-col rounded-2xl shadow-2xl overflow-hidden transition-all duration-300"
           style={{
-            width: '360px',
-            height: isMinimized ? 'auto' : '560px',
-            background: '#0f172a',
-            border: '1px solid rgba(99,102,241,0.2)',
-            boxShadow: '0 25px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(99,102,241,0.1)',
+            position: 'fixed',
+            bottom: '1.5rem',
+            right: '1.5rem',
+            zIndex: 9999,
+            width: '380px',
+            height: isMinimized ? 'auto' : '600px',
+            display: 'flex',
+            flexDirection: 'column',
+            borderRadius: '1.25rem',
+            overflow: 'hidden',
+            background: '#0d1526',
+            border: '1px solid rgba(99,102,241,0.25)',
+            boxShadow: '0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(99,102,241,0.1)',
+            transition: 'height 0.3s ease',
           }}
         >
           <ChatHeader
@@ -162,10 +191,18 @@ const ChatWidget = () => {
 
           {!isMinimized && (
             <>
-              {/* Messages */}
+              {/* Messages area */}
               <div
-                className="flex-1 overflow-y-auto p-4 space-y-4 chat-scroll"
-                style={{ background: 'linear-gradient(180deg, #0f172a 0%, #111827 100%)' }}
+                className="chat-scroll"
+                style={{
+                  flex: 1,
+                  overflowY: 'auto',
+                  padding: '1.25rem 1rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '1rem',
+                  background: 'linear-gradient(180deg, #0d1526 0%, #0f1a2e 100%)',
+                }}
               >
                 {messages.map((msg) => (
                   <MessageBubble key={msg.id} message={msg} />
@@ -173,8 +210,14 @@ const ChatWidget = () => {
                 <div ref={messagesEndRef} />
               </div>
 
-              {/* Quick Actions */}
-              <div style={{ background: '#0f172a' }}>
+              {/* Bottom panel */}
+              <div
+                style={{
+                  background: '#0d1526',
+                  borderTop: '1px solid rgba(99,102,241,0.15)',
+                  flexShrink: 0,
+                }}
+              >
                 <QuickActions onSelect={handleSend} disabled={isLoading} />
                 <ChatInput onSend={handleSend} isLoading={isLoading} />
               </div>

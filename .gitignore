@@ -3,7 +3,7 @@ node_modules/
 client/node_modules/
 server/node_modules/
 
-# Environment Variables (NEVER commit these)
+# Environment Variables — NEVER commit these
 .env
 .env.local
 .env.development.local
@@ -38,3 +38,6 @@ desktop.ini
 # Misc
 .eslintcache
 *.tsbuildinfo
+
+# Binary assets (not needed in repo)
+client/src/assets/hero.png

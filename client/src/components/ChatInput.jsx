@@ -25,19 +25,22 @@ const ChatInput = ({ onSend, isLoading }) => {
 
   const handleInput = (e) => {
     setInputValue(e.target.value);
-    // Auto-resize textarea
     const ta = textareaRef.current;
     if (ta) {
       ta.style.height = 'auto';
-      ta.style.height = Math.min(ta.scrollHeight, 100) + 'px';
+      ta.style.height = Math.min(ta.scrollHeight, 96) + 'px';
     }
   };
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex items-end gap-2 px-3 py-3 border-t"
-      style={{ borderColor: 'rgba(99,102,241,0.12)' }}
+      style={{
+        display: 'flex',
+        alignItems: 'flex-end',
+        gap: '0.5rem',
+        padding: '0.75rem 0.875rem',
+      }}
     >
       <textarea
         ref={textareaRef}
@@ -48,30 +51,59 @@ const ChatInput = ({ onSend, isLoading }) => {
         placeholder="Ask about Cynbit's services, products…"
         disabled={isLoading}
         rows={1}
-        className="flex-1 resize-none rounded-xl px-3 py-2.5 text-sm outline-none transition-all disabled:opacity-60"
-        style={{
-          background: 'rgba(30,41,59,0.8)',
-          border: '1px solid rgba(99,102,241,0.2)',
-          color: '#f1f5f9',
-          maxHeight: '100px',
-          lineHeight: '1.5',
-        }}
-        onFocus={(e) => (e.target.style.borderColor = 'rgba(99,102,241,0.5)')}
-        onBlur={(e) => (e.target.style.borderColor = 'rgba(99,102,241,0.2)')}
         aria-label="Chat message input"
+        style={{
+          flex: 1,
+          resize: 'none',
+          borderRadius: '0.875rem',
+          padding: '0.625rem 0.875rem',
+          fontSize: '0.8125rem',
+          lineHeight: 1.5,
+          outline: 'none',
+          background: 'rgba(15,28,52,0.9)',
+          border: '1px solid rgba(99,102,241,0.25)',
+          color: '#f1f5f9',
+          maxHeight: '96px',
+          fontFamily: 'Inter, sans-serif',
+          transition: 'border-color 0.2s',
+          opacity: isLoading ? 0.6 : 1,
+        }}
+        onFocus={(e) => (e.target.style.borderColor = 'rgba(99,102,241,0.6)')}
+        onBlur={(e) => (e.target.style.borderColor = 'rgba(99,102,241,0.25)')}
       />
       <button
         id="chat-send-btn"
         type="submit"
         disabled={!inputValue.trim() || isLoading}
-        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all disabled:opacity-40 disabled:cursor-not-allowed hover:brightness-110 active:scale-95"
-        style={{ background: 'linear-gradient(135deg, #2563eb, #0e7490)' }}
         aria-label="Send message"
+        style={{
+          width: '2.375rem',
+          height: '2.375rem',
+          borderRadius: '0.75rem',
+          border: 'none',
+          cursor: !inputValue.trim() || isLoading ? 'not-allowed' : 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexShrink: 0,
+          background: 'linear-gradient(135deg, #2563eb, #0e7490)',
+          opacity: !inputValue.trim() || isLoading ? 0.4 : 1,
+          transition: 'opacity 0.2s, transform 0.15s',
+          boxShadow: '0 2px 8px rgba(37,99,235,0.3)',
+        }}
+        onMouseEnter={(e) => {
+          if (inputValue.trim() && !isLoading) {
+            e.currentTarget.style.transform = 'scale(1.05)';
+          }
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'scale(1)';
+        }}
       >
         {isLoading ? (
-          <Loader2 size={16} className="text-white animate-spin" />
+          <Loader2 size={15} color="white" style={{ animation: 'spin 1s linear infinite' }} />
         ) : (
-          <Send size={16} className="text-white" />
+          <Send size={15} color="white" />
         )}
       </button>
     </form>
