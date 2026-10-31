@@ -20,9 +20,9 @@ A **persistent AI-powered chatbot** that allows visitors to ask natural language
 |-------|-----------|
 | Frontend | React 19 + Vite |
 | Styling | Tailwind CSS v4 |
-| Backend | Node.js + Express |
-| Database | MongoDB Atlas (Mongoose) |
-| AI | OpenAI GPT API (gpt-4o-mini) |
+| Backend | Node.js + Express 5 |
+| Database | MongoDB Atlas (Mongoose) + Resilient In-Memory Fallback |
+| AI Options | Google Gemini (100% Free Tier) / OpenAI GPT / Built-in Knowledge Base Engine |
 | API Communication | Axios |
 | Icons | Lucide React |
 | Frontend Hosting | Vercel |
@@ -49,7 +49,7 @@ cynbit-ai-assistant/
 │   └── vite.config.js
 │
 ├── server/                 # Express backend
-│   ├── config/db.js        # MongoDB connection
+│   ├── config/db.js        # MongoDB connection with resilient fallback
 │   ├── controllers/chatController.js
 │   ├── middleware/rateLimiter.js
 │   ├── models/
@@ -57,7 +57,7 @@ cynbit-ai-assistant/
 │   │   └── Lead.js
 │   ├── routes/chatRoutes.js
 │   ├── services/
-│   │   ├── aiService.js    # OpenAI integration + fallback
+│   │   ├── aiService.js    # Multi-provider AI (Gemini/OpenAI) + fallback
 │   │   └── knowledgeBase.js # Cynbit company data
 │   ├── .env.example
 │   └── server.js
@@ -70,14 +70,13 @@ cynbit-ai-assistant/
 
 ### Prerequisites
 - Node.js v18+
-- MongoDB Atlas account
-- OpenAI API key
+- (Optional) Free Google Gemini API Key or MongoDB Atlas account — runs 100% free out of the box!
 
 ### Local Setup
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/VikashRaj-cmd/cynbit-ai-assistant.git
    cd cynbit-ai-assistant
    ```
 
@@ -85,7 +84,7 @@ cynbit-ai-assistant/
    ```bash
    cd server
    cp .env.example .env
-   # Edit .env with your MongoDB URI and OpenAI API key
+   # .env comes preconfigured; add GEMINI_API_KEY for free AI or run with built-in Knowledge Base
    npm run dev
    ```
 
@@ -101,7 +100,7 @@ cynbit-ai-assistant/
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| `GET` | `/api/chat/health` | Health check |
+| `GET` | `/api/chat/health` | Health check & database status |
 | `POST` | `/api/chat/message` | Send a chat message |
 | `GET` | `/api/chat/history/:sessionId` | Get conversation history |
 | `POST` | `/api/chat/lead` | Submit contact lead |
@@ -109,10 +108,11 @@ cynbit-ai-assistant/
 ## ✨ Key Features
 
 - **Context-aware AI responses** grounded in Cynbit's real company data
-- **Intelligent fallback** — keyword-based responses when AI is unavailable
-- **MongoDB persistence** — conversations saved per session
-- **Rate limiting** — 50 requests/15 min per IP
-- **Quick action buttons** for common questions
+- **100% Free Tier Ready** — works with Google Gemini Free Tier or zero-config Knowledge Base Engine
+- **Resilient Fallback** — instant automatic fallback when AI quota is exceeded (HTTP 429)
+- **MongoDB Atlas + In-Memory Fallback** — seamless local testing even without database configuration
+- **Rate limiting** — 50 requests/15 min per IP with Helmet security
+- **Quick action buttons** for common questions (Services, Products, Careers, BitElevate)
 - **Clickable links** to relevant Cynbit pages
 - **Lead capture** for visitors wanting human assistance
 - **Responsive** — works on mobile, tablet, desktop
@@ -124,11 +124,11 @@ cynbit-ai-assistant/
 - Captures leads from high-intent visitors
 - Provides 24/7 instant answers without human support
 
-## 📝 Live URLs
+## 📝 Links
 
-- **Frontend (Vercel):** `[Add after deployment]`
-- **Backend (Render):** `[Add after deployment]`
-- **GitHub:** `[Add repository link]`
+- **GitHub Repository:** [https://github.com/VikashRaj-cmd/cynbit-ai-assistant](https://github.com/VikashRaj-cmd/cynbit-ai-assistant)
+- **Frontend (Vercel):** `[Deploy via Vercel]`
+- **Backend (Render):** `[Deploy via Render]`
 
 ---
 
