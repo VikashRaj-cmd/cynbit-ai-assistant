@@ -20,13 +20,19 @@ export const generateAIResponse = async (messages) => {
         systemInstruction: systemPrompt,
       });
 
-      // Format conversation history for Gemini
-      const contents = messages.map((m) => ({
-        role: m.role === 'assistant' ? 'model' : 'user',
-        parts: [{ text: m.content }],
-      }));
+      // Format conversation history for Gemini — must start with user role
+      const contents = messages
+        .filter((m) => m.role === 'user' || m.role === 'assistant')
+        .map((m) => ({
+          role: m.role === 'assistant' ? 'model' : 'user',
+          parts: [{ text: m.content }],
+        }));
 
-      const result = await model.generateContent({ contents });
+      // Gemini requires conversation to start with user
+      const firstUserIdx = contents.findIndex((c) => c.role === 'user');
+      const validContents = firstUserIdx > 0 ? contents.slice(firstUserIdx) : contents;
+
+      const result = await model.generateContent({ contents: validContents });
       const response = await result.response;
       const text = response.text();
       if (text) return text;

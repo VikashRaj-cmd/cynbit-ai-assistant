@@ -19,9 +19,10 @@ app.use(helmet());
 
 // CORS configuration
 const allowedOrigins = [
-  'http://localhost:5173',     // Vite dev server
-  'http://localhost:3000',     // Alternative dev port
-  process.env.CLIENT_URL,     // Production frontend URL
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:3000',
+  process.env.CLIENT_URL,
 ].filter(Boolean);
 
 app.use(
