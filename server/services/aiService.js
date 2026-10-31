@@ -1,44 +1,65 @@
 import OpenAI from 'openai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { getSystemPrompt } from './knowledgeBase.js';
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 /**
  * Generate an AI response grounded in Cynbit's knowledge base.
+ * Supports Google Gemini (Free tier) and OpenAI, with automatic fallback.
  * @param {Array} messages - Array of {role, content} message history
  * @returns {string} - AI generated response text
  */
 export const generateAIResponse = async (messages) => {
-  try {
-    const systemPrompt = getSystemPrompt();
+  const systemPrompt = getSystemPrompt();
 
-    const response = await openai.chat.completions.create({
-      model: process.env.AI_MODEL || 'gpt-4o-mini',
-      messages: [
-        { role: 'system', content: systemPrompt },
-        ...messages.map((msg) => ({
-          role: msg.role,
-          content: msg.content,
-        })),
-      ],
-      max_tokens: 500,
-      temperature: 0.7,
-    });
+  // 1. Try Google Gemini first if GEMINI_API_KEY is available (100% Free Tier)
+  if (process.env.GEMINI_API_KEY) {
+    try {
+      const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+      const model = genAI.getGenerativeModel({
+        model: process.env.GEMINI_MODEL || 'gemini-1.5-flash',
+        systemInstruction: systemPrompt,
+      });
 
-    return response.choices[0].message.content;
-  } catch (error) {
-    console.error('AI Service Error:', error.message);
+      // Format conversation history for Gemini
+      const contents = messages.map((m) => ({
+        role: m.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: m.content }],
+      }));
 
-    // Graceful fallback response
-    if (error.status === 429) {
-      throw new Error('RATE_LIMIT');
-    } else if (error.status === 401) {
-      throw new Error('AUTH_ERROR');
+      const result = await model.generateContent({ contents });
+      const response = await result.response;
+      const text = response.text();
+      if (text) return text;
+    } catch (geminiError) {
+      console.warn('Gemini API Error:', geminiError.message);
     }
-    throw new Error('AI_UNAVAILABLE');
   }
+
+  // 2. Try OpenAI if OPENAI_API_KEY is available
+  if (process.env.OPENAI_API_KEY) {
+    try {
+      const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+      const response = await openai.chat.completions.create({
+        model: process.env.AI_MODEL || 'gpt-4o-mini',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          ...messages.map((msg) => ({
+            role: msg.role,
+            content: msg.content,
+          })),
+        ],
+        max_tokens: 500,
+        temperature: 0.7,
+      });
+
+      return response.choices[0].message.content;
+    } catch (openAiError) {
+      console.warn('OpenAI API Error:', openAiError.message);
+    }
+  }
+
+  // 3. If no API keys or both failed (e.g. quota 429), throw so controller uses knowledge-base fallback
+  throw new Error('AI_UNAVAILABLE');
 };
 
 /**

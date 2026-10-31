@@ -51,55 +51,71 @@ git push -u origin main
 
 ---
 
-## ✅ Step 3: Get OpenAI API Key
+## ✅ Step 3: Choose Your AI Provider (100% Free Options Available)
 
-1. Go to → **https://platform.openai.com/api-keys**
-2. Sign in or create an account
-3. Click **"Create new secret key"**
-4. Name it: `cynbit-assessment`
-5. Copy the key (starts with `sk-proj-...`)
+You have **3 options** for AI, including completely free choices:
 
-> ⚠️ You need to add a small credit ($5) for API access. Use **gpt-4o-mini** model — it's very cheap (~$0.15 per 1M tokens).
+### Option A: Google Gemini (Recommended — 100% Free, No Credit Card Required)
+1. Go to → **https://aistudio.google.com/app/apikey**
+2. Sign in with any standard Google account.
+3. Click **"Create API key"**.
+4. Copy the generated key.
+5. In `server/.env`, set:
+   ```env
+   GEMINI_API_KEY=your_gemini_api_key_here
+   GEMINI_MODEL=gemini-1.5-flash
+   ```
+*(Free tier allows up to 15 requests per minute at $0 cost!)*
+
+### Option B: Built-in Knowledge Base Engine (100% Free, Zero Keys Needed)
+- If you don't provide any API key, the chatbot automatically uses its **built-in Cynbit Knowledge Base Engine**.
+- It provides rich, grounded answers regarding Cynbit's services, proprietary products (Studio, TenantEase, Revio), BitElevate, recruitment, and contact details with zero API costs!
+
+### Option C: OpenAI API
+- If you have OpenAI credits:
+  ```env
+  OPENAI_API_KEY=sk-proj-your-actual-api-key-here
+  AI_MODEL=gpt-4o-mini
+  ```
+- *Note:* If quota is 0 (HTTP 429), the assistant automatically switches to the Knowledge Base engine without interrupting the user.
 
 ---
 
-## ✅ Step 4: Set Up MongoDB Atlas
+## ✅ Step 4: MongoDB Atlas (Optional for Local Testing)
 
+> 💡 **Note:** If you skip MongoDB setup, the server automatically uses a **resilient in-memory store** so you can develop and test immediately with zero configuration!
+
+To persist conversations and leads to the cloud:
 1. Go to → **https://cloud.mongodb.com/**
-2. Sign up / Sign in
-3. Click **"Create a New Cluster"** → choose **"M0 Free Tier"**
-4. Select region: **Mumbai (ap-south-1)** or nearest
-5. Name: `cynbit-cluster`
-6. Wait for cluster to be created (~2-3 minutes)
-
-**Get connection string:**
-1. Click **"Connect"** on your cluster
-2. Choose **"Connect your application"**
-3. Select **Driver: Node.js**, Version: latest
-4. Copy the connection string — looks like:
+2. Sign up / Sign in → choose **"M0 Free Tier"** (Free Forever)
+3. Select region: **Mumbai (ap-south-1)**
+4. Click **"Connect"** → **"Connect your application"**
+5. Copy your connection string and add it to `server/.env`:
+   ```env
+   MONGODB_URI=mongodb+srv://username:<password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority
    ```
-   mongodb+srv://username:<password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority
-   ```
-5. Replace `<password>` with your actual database password
-
-**Allow IP Access:**
-1. Go to **Network Access** (left sidebar)
-2. Click **"Add IP Address"**
-3. Click **"Allow Access from Anywhere"** → Confirm
-   > (For production, you'll restrict this to Render's IPs)
+6. Under **Network Access**, ensure IP `0.0.0.0/0` (Allow Access from Anywhere) is enabled.
 
 ---
 
-## ✅ Step 5: Create Server .env File
+## ✅ Step 5: Server .env File
 
-Inside `E:\CynBit Assessment\server\`, create a file named `.env`:
+Your `E:\CynBit Assessment\server\.env` has already been generated:
 
-```
+```env
 PORT=5000
 NODE_ENV=development
-MONGODB_URI=mongodb+srv://your_username:your_password@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority
-OPENAI_API_KEY=sk-proj-your-actual-api-key-here
+
+# Optional - defaults to in-memory store if not provided:
+# MONGODB_URI=mongodb+srv://username:<password>@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority
+
+# Free Tier AI (Gemini):
+# GEMINI_API_KEY=your_free_key
+
+# OpenAI:
+OPENAI_API_KEY=sk-proj-xxxxxxxxxxxxxxxxxxxx
 AI_MODEL=gpt-4o-mini
+
 CLIENT_URL=http://localhost:5173
 ```
 

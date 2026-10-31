@@ -9,10 +9,29 @@
     "dev": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["cynbit", "ai", "chatbot", "express", "mongodb"],
+  "keywords": [
+    "cynbit",
+    "ai",
+    "chatbot",
+    "express",
+    "mongodb"
+  ],
   "author": "Vikash Rajput",
   "license": "ISC",
   "engines": {
     "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.2",
+    "helmet": "^8.3.0",
+    "mongoose": "^9.11.4",
+    "openai": "^7.47.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }
