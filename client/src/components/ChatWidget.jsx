@@ -43,10 +43,8 @@ const ChatWidget = () => {
   }, [isOpen]);
 
   useEffect(() => {
-    if (!showLeadForm) {
-      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [messages, showLeadForm]);
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   const handleOpen = () => {
     setIsOpen(true);
@@ -54,17 +52,11 @@ const ChatWidget = () => {
     setHasNotification(false);
   };
 
-  const handleClose = () => {
-    setIsOpen(false);
-    setShowLeadForm(false);
-  };
-
+  const handleClose = () => setIsOpen(false);
   const handleToggleMinimize = () => setIsMinimized((prev) => !prev);
 
   const handleSend = useCallback(async (text) => {
     if (!text.trim() || isLoading) return;
-
-    setShowLeadForm(false);
 
     const userMessage = {
       id: `user_${Date.now()}`,
@@ -127,7 +119,16 @@ const ChatWidget = () => {
 
   return (
     <>
-      {/* Floating Button */}
+      {/* ── Lead Form Modal (full-screen overlay, outside chat window) ── */}
+      {showLeadForm && (
+        <LeadForm
+          sessionId={sessionId.current}
+          onClose={() => setShowLeadForm(false)}
+          onSuccess={handleLeadSuccess}
+        />
+      )}
+
+      {/* ── Floating Button ── */}
       {!isOpen && (
         <button
           id="cynbit-chat-btn"
@@ -186,7 +187,7 @@ const ChatWidget = () => {
         </button>
       )}
 
-      {/* Chat Window */}
+      {/* ── Chat Window ── */}
       {isOpen && (
         <div
           id="cynbit-chat-window"
@@ -215,44 +216,26 @@ const ChatWidget = () => {
 
           {!isMinimized && (
             <>
-              {showLeadForm ? (
-                /* Lead capture form view */
-                <div
-                  className="chat-scroll"
-                  style={{
-                    flex: 1,
-                    overflowY: 'auto',
-                    background: 'linear-gradient(180deg, #0d1526 0%, #0f1a2e 100%)',
-                  }}
-                >
-                  <LeadForm
-                    sessionId={sessionId.current}
-                    onClose={() => setShowLeadForm(false)}
-                    onSuccess={handleLeadSuccess}
-                  />
-                </div>
-              ) : (
-                /* Chat view */
-                <div
-                  className="chat-scroll"
-                  style={{
-                    flex: 1,
-                    overflowY: 'auto',
-                    padding: '1.25rem 1rem',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '1rem',
-                    background: 'linear-gradient(180deg, #0d1526 0%, #0f1a2e 100%)',
-                  }}
-                >
-                  {messages.map((msg) => (
-                    <MessageBubble key={msg.id} message={msg} />
-                  ))}
-                  <div ref={messagesEndRef} />
-                </div>
-              )}
+              {/* Messages */}
+              <div
+                className="chat-scroll"
+                style={{
+                  flex: 1,
+                  overflowY: 'auto',
+                  padding: '1.25rem 1rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '1rem',
+                  background: 'linear-gradient(180deg, #0d1526 0%, #0f1a2e 100%)',
+                }}
+              >
+                {messages.map((msg) => (
+                  <MessageBubble key={msg.id} message={msg} />
+                ))}
+                <div ref={messagesEndRef} />
+              </div>
 
-              {/* Bottom panel — always visible */}
+              {/* Bottom panel */}
               <div
                 style={{
                   background: '#0d1526',
@@ -260,48 +243,46 @@ const ChatWidget = () => {
                   flexShrink: 0,
                 }}
               >
-                {/* Talk to a human button */}
-                {!showLeadForm && (
-                  <div
+                {/* Talk to a human */}
+                <div
+                  style={{
+                    padding: '0.5rem 0.875rem 0',
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                  }}
+                >
+                  <button
+                    onClick={() => setShowLeadForm(true)}
                     style={{
-                      padding: '0.5rem 0.875rem 0',
-                      display: 'flex',
-                      justifyContent: 'flex-end',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.375rem',
+                      padding: '0.3rem 0.75rem',
+                      borderRadius: '9999px',
+                      border: '1px solid rgba(52,211,153,0.3)',
+                      background: 'rgba(52,211,153,0.08)',
+                      color: '#6ee7b7',
+                      fontSize: '0.7rem',
+                      fontWeight: 500,
+                      cursor: 'pointer',
+                      transition: 'background 0.15s, border-color 0.15s',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'rgba(52,211,153,0.18)';
+                      e.currentTarget.style.borderColor = 'rgba(52,211,153,0.55)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'rgba(52,211,153,0.08)';
+                      e.currentTarget.style.borderColor = 'rgba(52,211,153,0.3)';
                     }}
                   >
-                    <button
-                      onClick={() => setShowLeadForm(true)}
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.375rem',
-                        padding: '0.3rem 0.75rem',
-                        borderRadius: '9999px',
-                        border: '1px solid rgba(52,211,153,0.3)',
-                        background: 'rgba(52,211,153,0.08)',
-                        color: '#6ee7b7',
-                        fontSize: '0.7rem',
-                        fontWeight: 500,
-                        cursor: 'pointer',
-                        transition: 'background 0.15s, border-color 0.15s',
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.background = 'rgba(52,211,153,0.18)';
-                        e.currentTarget.style.borderColor = 'rgba(52,211,153,0.55)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.background = 'rgba(52,211,153,0.08)';
-                        e.currentTarget.style.borderColor = 'rgba(52,211,153,0.3)';
-                      }}
-                    >
-                      <UserRound size={11} />
-                      Talk to a human
-                    </button>
-                  </div>
-                )}
+                    <UserRound size={11} />
+                    Talk to a human
+                  </button>
+                </div>
 
-                <QuickActions onSelect={handleSend} disabled={isLoading || showLeadForm} />
-                <ChatInput onSend={handleSend} isLoading={isLoading || showLeadForm} />
+                <QuickActions onSelect={handleSend} disabled={isLoading} />
+                <ChatInput onSend={handleSend} isLoading={isLoading} />
               </div>
             </>
           )}
