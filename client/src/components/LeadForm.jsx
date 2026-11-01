@@ -209,7 +209,7 @@ const LeadForm = ({ sessionId, onClose, onSuccess }) => {
                       name="name"
                       value={form.name}
                       onChange={handleChange}
-                      placeholder="Vikash Rajput"
+                      placeholder="Your full name"
                       autoComplete="off"
                       style={inputStyle}
                       onFocus={(e) => applyFocus(e)}
