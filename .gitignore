@@ -39,5 +39,14 @@ desktop.ini
 .eslintcache
 *.tsbuildinfo
 
-# Binary assets (not needed in repo)
+# Binary / unused assets
 client/src/assets/hero.png
+client/public/icons.svg
+
+# Lock files (optional — remove these lines if you want to commit lock files)
+package-lock.json
+client/package-lock.json
+server/package-lock.json
+
+# Empty directories
+client/src/hooks/
